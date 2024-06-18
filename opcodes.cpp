@@ -1,10 +1,4 @@
-#include "types.h"
-#include "opcodes.h"
-
-/* Just realized this file needs access to all the CHIP8 variables lol. 
-   Passing those in would be a mess so lets def turn CHIP8 into a class
-  This entire thing is now deprecated
-*/
+#include "chip8.h"
 
 /* KEY
 * NNN: Address
@@ -16,178 +10,178 @@
 * VN: One of the 16 available registers
 */
 
-void opcode0NNN(WORD opcode)
+void Chip8::opcode0NNN()
 {
   //wiki says calls a code routine at NNN 
   return; // no working implementation atm
 }
 
-void opcode00E0(WORD opcode)
+void Chip8::opcode00E0()
 {
   //clear the display
 }
 
-void opcode00EE(WORD opcode)
+void Chip8::opcode00EE()
 {
   //return from subroutine;
 }
 
-void opcode1NNN(WORD opcode)
+void Chip8::opcode1NNN()
 {
   //program counter jumps to NNN address
 }
 
-void opcode2NNN(WORD opcode)
+void Chip8::opcode2NNN()
 {
   //calls subroutine at NNN address
 }
 
-void opcode3XNN(WORD opcode)
+void Chip8::opcode3XNN()
 {
   //skip next instruction if VX == NN
 }
 
-void opcode4XNN(WORD opcode)
+void Chip8::opcode4XNN()
 {
   //Skip next instruction if VX != NN
 }
 
-void opcode5XYO(WORD opcode)
+void Chip8::opcode5XYO()
 {
   //Skip next instruction if VX == VY
 }
 
-void opcode6XNN(WORD opcode)
+void Chip8::opcode6XNN()
 {
   //Set VX == NN
 }
 
-void opcode7XNN(WORD opcode)
+void Chip8::opcode7XNN()
 {
   //Add NN to VX (carry flag is not changed)
 }
 
-void opcode8XY0(WORD opcode)
+void Chip8::opcode8XY0()
 {
 
 }
 
-void opcode8XY1(WORD opcode)
+void Chip8::opcode8XY1()
 {
 
 }
 
-void opcode8XY2(WORD opcode)
+void Chip8::opcode8XY2()
 {
 
 }
 
-void opcode8XY3(WORD opcode)
+void Chip8::opcode8XY3()
 {
 
 }
 
-void opcode8XY4(WORD opcode)
+void Chip8::opcode8XY4()
 {
 
 }
 
-void opcode8XY5(WORD opcode)
+void Chip8::opcode8XY5()
 {
 
 }
 
-void opcode8XY6(WORD opcode)
+void Chip8::opcode8XY6()
 {
 
 }
 
-void opcode8XY7(WORD opcode)
+void Chip8::opcode8XY7()
 {
 
 }
 
-void opcode8XYE(WORD opcode)
+void Chip8::opcode8XYE()
 {
 
 }
 
-void opcode9XY0(WORD opcode)
+void Chip8::opcode9XY0()
 {
 
 }
 
-void opcodeANNN(WORD opcode)
+void Chip8::opcodeANNN()
 {
 
 }
 
-void opcodeBNNN(WORD opcode)
+void Chip8::opcodeBNNN()
 {
 
 }
 
-void opcodeCXNN(WORD opcode)
+void Chip8::opcodeCXNN()
 {
 
 }
 
-void opcodeDXYN(WORD opcode)
+void Chip8::opcodeDXYN()
 {
 
 }
 
-void opcodeEX9E(WORD opcode)
+void Chip8::opcodeEX9E()
 {
 
 }
 
-void opcodeEXA1(WORD opcode)
+void Chip8::opcodeEXA1()
 {
 
 }
 
-void opcodeFX07(WORD opcode)
+void Chip8::opcodeFX07()
 {
 
 }
 
-void opcodeFX0A(WORD opcode)
+void Chip8::opcodeFX0A()
 {
 
 }
 
-void opcodeFX15(WORD opcode)
+void Chip8::opcodeFX15()
 {
 
 }
 
-void opcodeFX18(WORD opcode)
+void Chip8::opcodeFX18()
 {
 
 }
 
-void opcodeFX1E(WORD opcode)
+void Chip8::opcodeFX1E()
 {
 
 }
 
-void opcodeFX29(WORD opcode)
+void Chip8::opcodeFX29()
 {
 
 }
 
-void opcodeFX33(WORD opcode)
+void Chip8::opcodeFX33()
 {
 
 }
 
-void opcodeFX55(WORD opcode)
+void Chip8::opcodeFX55()
 {
 
 }
 
-void opcodeFX65(WORD opcode)
+void Chip8::opcodeFX65()
 {
 
 }
