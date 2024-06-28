@@ -24,6 +24,8 @@ void Chip8::opcode00E0()
 void Chip8::opcode00EE()
 {
   //return from subroutine;
+  pc = stack.top();
+  stack.pop();
 }
 
 void Chip8::opcode1NNN()
@@ -35,6 +37,8 @@ void Chip8::opcode1NNN()
 void Chip8::opcode2NNN()
 {
   //calls subroutine at NNN address
+  stack.push(pc);
+  pc = (opcode & 0x0FFF);
 }
 
 void Chip8::opcode3XNN()
@@ -190,7 +194,13 @@ void Chip8::opcode8XYE()
 
 void Chip8::opcode9XY0()
 {
-
+  // If (VX != VY) Skip next instruction
+  uint8_t VX = (opcode & 0x0F00) >> 8;
+  uint8_t VY = (opcode & 0x00F0) >> 4;
+  if(VX != VY)
+  {
+    pc += WORD_SIZE; //Maybe make this a skip instruction
+  }
 }
 
 void Chip8::opcodeANNN()
@@ -201,90 +211,134 @@ void Chip8::opcodeANNN()
 
 void Chip8::opcodeBNNN()
 {
-
+  // Set pc to V0 + NNN
+  uint16_t NNN = (opcode & 0x0FFF);
+  pc = registers[0x0] + NNN;
 }
 
 void Chip8::opcodeCXNN()
 {
-
+  //Vx = rand() & NN
+  //oops need to implement rand(). Come back to this 
 }
 
 void Chip8::opcodeDXYN()
 {
-  //Draw command. Gonna be a big one...
-  //come back to it tomorrow or som
+  // This needs a fair bit of refactoring for readability lul
+  // That's an issue for later
+  //Also the current screen implementation is not set up for this.
   uint8_t registerX = ((opcode & 0x0F00) >> 8);
   uint8_t registerY = ((opcode & 0x00F0) >> 4);
   uint8_t xCoordinate = registers[registerX] % 64;
   uint8_t yCoordinate = registers[registerY] % 31;
   registers[0x000F] = 0;
-  uint8_t nValue = 0x000F;
+  uint8_t nValue = opcode & 0x000F;
   for(uint8_t i = 0; i < nValue; i++)
   {
     uint8_t spriteData = memory[I + i];
     for(uint8_t j = 0; j < 8; j++)
     {
-      
-      if(screenData[i][j] = screenData[xCoordinate][yCoordinate])
+     
+      spriteData = (spriteData & 0x80) >> j; //mask the MSB of the sprite info
+      if (spriteData == 1)
       {
-
+        if(screenData[i][j] == 0xFF)
+        {
+          registers[0xF] = 1;
+        }
+        screenData[i][j] ^= 0xFF;
       }
     }
   }
-
 }
 
 void Chip8::opcodeEX9E()
 {
+  //if(key() == Vx) skip next instruction
+  //I need to have the keyboard part made for this
+  uint8_t VX = (opcode & 0x0F00) >> 8;
 
 }
 
 void Chip8::opcodeEXA1()
 {
+  //if(key() != Vx) skip next instruction
 
 }
 
 void Chip8::opcodeFX07()
 {
-
+  uint8_t VX = (opcode & 0x0F00) >> 8;
+  registers[VX] = delayTimer;
 }
 
 void Chip8::opcodeFX0A()
 {
-
+  uint8_t VX = (opcode & 0x0F00) >> 8;
+  registers[VX] = soundTimer;
 }
 
 void Chip8::opcodeFX15()
 {
-
+  uint8_t VX = (opcode & 0x0F00) >> 8;
+  delayTimer = registers[VX];
 }
 
 void Chip8::opcodeFX18()
 {
-
+  uint8_t VX = (opcode & 0x0F00) >> 8;
+  soundTimer = registers[VX];
 }
 
 void Chip8::opcodeFX1E()
 {
-
+  // I += Vx
+ uint8_t VX = (opcode & 0x0F00) >> 8;
+ I += registers[VX];
 }
 
 void Chip8::opcodeFX29()
 {
+  // I = address of hexadecimal character in VX
+  uint8_t VX = (opcode & 0x0F00) >> 8;
+  uint8_t value = registers[VX];
+  I = FONTSET_START_ADDRESS + (5 * value);
 
 }
 
 void Chip8::opcodeFX33()
 {
-
+  //store the bcd representation of VX in I
+  //uhhhhhhhh refactor pls 
+  uint8_t VX = (opcode & 0x0F00) >> 8;
+  uint8_t value = registers[VX];
+  uint8_t digit1 = value / 100;
+  value -= (digit1 * 100);
+  uint8_t digit2 = value / 10;
+  value -= (digit2 * 10);
+  uint8_t digit3 = value;
+  WORD* ptrI = &I;
+  *ptrI = digit1;
+  *(ptrI + 1) = digit2;
+  *(ptrI + 2) = digit3; 
 }
 
 void Chip8::opcodeFX55()
 {
-
+  uint8_t X = (opcode & 0x0F00) >> 8;
+  WORD* ptrI = &I;
+  for(WORD i = 0; i <= X; i++)
+  {
+    *(ptrI + i) = registers[i];
+  }
 }
 
 void Chip8::opcodeFX65()
 {
-
+    uint8_t X = (opcode & 0x0F00) >> 8;
+  WORD* ptrI = &I;
+  for(WORD i = 0; i <= X; i++)
+  {
+    registers[i] = *(ptrI + i);
+  }
 }

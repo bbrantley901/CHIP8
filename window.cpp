@@ -53,6 +53,7 @@ Screen::Screen()
 
 }
 
+//Should be update screen array 
 void Screen::UpdatePixel(uint16_t x, uint16_t y, bool state)
 {
   screenArray[x][y] = state;
