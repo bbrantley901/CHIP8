@@ -1,6 +1,9 @@
 #include "keyboard.h"
 
-
+Keyboard::Keyboard()
+{
+  
+}
 void Keyboard::getKeys(uint8_t* keys)
 {
   while(SDL_PollEvent(&event))

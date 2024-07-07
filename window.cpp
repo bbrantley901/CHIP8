@@ -1,5 +1,4 @@
 #include <iostream>
-#include "SDL2/SDL.h"
 #include "window.h"
 
 /* To do all the drawing we need to create a window 

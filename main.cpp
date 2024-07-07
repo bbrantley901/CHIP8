@@ -2,7 +2,7 @@
 #include <iostream>
 #include <cstring>
 
-int main()
+int main(int argc, char *argv[])
 {
   Chip8 chip;
   

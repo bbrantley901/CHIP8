@@ -295,7 +295,6 @@ void Chip8::opcodeFX0A()
   //Get key press
   //This current method is so awful, I swear I'll redo it at some point lmao      
   //Big case of unclear data ownership
-   uint8_t VX = (opcode & 0x0F00) >> 8;
   registers[VX] = soundTimer;
   SDLkeyboard.getKeys(keyboard);
   if(keyboard[0])
