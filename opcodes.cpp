@@ -1,5 +1,5 @@
 #include "chip8.h"
-
+#include "stdlib.h"
 /* KEY
 * NNN: Address
 * NN: 8-bit constant
@@ -219,7 +219,12 @@ void Chip8::opcodeBNNN()
 void Chip8::opcodeCXNN()
 {
   //Vx = rand() & NN
-  //oops need to implement rand(). Come back to this 
+  //oops need to implement rand(). Come back to this   
+  uint16_t range = 256;
+  uint8_t num = rand() % range;
+  uint8_t VX = (opcode & 0x0F00) >> 8;
+  uint8_t NN = (opcode & 0x00FF);
+  registers[VX] = num & NN;
 }
 
 void Chip8::opcodeDXYN()
@@ -257,12 +262,24 @@ void Chip8::opcodeEX9E()
   //if(key() == Vx) skip next instruction
   //I need to have the keyboard part made for this
   uint8_t VX = (opcode & 0x0F00) >> 8;
-
+  SDLkeyboard.getKeys(keyboard);
+  BYTE key = registers[VX];
+  if(keyboard[key])
+  {
+    pc += WORD_SIZE;
+  }
 }
 
 void Chip8::opcodeEXA1()
 {
   //if(key() != Vx) skip next instruction
+  uint8_t VX = (opcode & 0x0F00) >> 8;
+  SDLkeyboard.getKeys(keyboard);
+  BYTE key = registers[VX];
+  if(!keyboard[key])
+  {
+    pc += WORD_SIZE;
+  }
 
 }
 
@@ -275,7 +292,79 @@ void Chip8::opcodeFX07()
 void Chip8::opcodeFX0A()
 {
   uint8_t VX = (opcode & 0x0F00) >> 8;
+  //Get key press
+  //This current method is so awful, I swear I'll redo it at some point lmao      
+  //Big case of unclear data ownership
+   uint8_t VX = (opcode & 0x0F00) >> 8;
   registers[VX] = soundTimer;
+  SDLkeyboard.getKeys(keyboard);
+  if(keyboard[0])
+  {
+    registers[VX] = 0;
+  }
+  else if(keyboard[1])
+  {
+    registers[VX] = 1;
+  }
+  else if(keyboard[2]) 
+  {
+    registers[VX] = 2;
+  }
+  else if(keyboard[3]) 
+  {
+    registers[VX] = 3;
+  }
+  else if(keyboard[4]) 
+  {
+    registers[VX] = 4;
+  }
+  else if(keyboard[5]) 
+  {
+    registers[VX] = 5;
+  }
+  else if(keyboard[6]) 
+  {
+    registers[VX] = 6;
+  }
+  else if(keyboard[7]) 
+  {
+    registers[VX] = 7;
+  }
+  else if(keyboard[8]) 
+  {
+    registers[VX] = 8;
+  }
+  else if(keyboard[9]) 
+  {
+    registers[VX] = 9;
+  }
+  else if(keyboard[10]) 
+  {
+    registers[VX] = 10;
+  }
+  else if(keyboard[11]) 
+  {
+    registers[VX] = 11;
+  }
+  else if(keyboard[12]) 
+  {
+    registers[VX] = 12;
+  }
+  else if(keyboard[13]) 
+  {
+    registers[VX] = 13;
+  }
+  else if(keyboard[14]) 
+  {
+    registers[VX] = 14;
+  }
+  else if(keyboard[15]) 
+  {
+    registers[VX] = 15;
+  }
+  else{
+    pc -= WORD_SIZE;
+ }
 }
 
 void Chip8::opcodeFX15()

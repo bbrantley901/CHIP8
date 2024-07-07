@@ -1,32 +1,12 @@
 #include <iostream>
 #include "SDL2/SDL.h"
-
+#include "window.h"
 
 /* To do all the drawing we need to create a window 
 and use the renderer to actually draw to the screen and update it.
 Wonder what issues will arise when I start calling this from the cpu instructions
 */
 
-typedef enum{
-  BLACK,
-  WHITE
-} PixelColor;
-static const uint16_t TITLE_BAR_SIZE = 50;
-typedef int status_t;
-class Screen
-{
-  public:
-    Screen();
-    void UpdatePixel(uint16_t x, uint16_t y, bool state);
-    void RenderWindow();
-    void DestroyScreen();
-    void ClearScreen();
-    uint8_t screenArray[64][32];
-    SDL_Window* window = nullptr;
-    SDL_Renderer* renderer = nullptr;
-  private:
-    void DrawPoint(uint16_t x, uint16_t y, bool color);
-};
 
 Screen::Screen()
 {
@@ -98,6 +78,7 @@ void Screen::DrawPoint(uint16_t x, uint16_t y, bool color)
   SDL_RenderDrawPoint(renderer, x, y);
 }
 
+/*
 int main()
 {
   Screen screen;
@@ -118,3 +99,4 @@ int main()
   return 0;
   
 }
+*/

@@ -2,6 +2,8 @@
 #include <stdint.h>
 #include "types.h"
 #include <stack>
+#include "window.h"
+#include "keyboard.h"
 
 static const uint8_t  WORD_SIZE = 2;
 static const uint16_t START_ADDRESS = 0x200;
@@ -41,7 +43,10 @@ class Chip8
     BYTE soundTimer;
     BYTE keypad[16];
     BYTE screenData[64][32];
+    BYTE keyboard[16];
     WORD opcode;
+    Keyboard SDLkeyboard;
+    Screen screen;
 
   /* Function Table Stuff */
     typedef void (Chip8::*func)();

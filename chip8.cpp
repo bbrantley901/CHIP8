@@ -81,6 +81,7 @@ Chip8::Chip8()
 void Chip8::CPU_Init()
 {
   memset(registers, 0, sizeof(registers));
+  memset(keyboard, 0, sizeof(keyboard));
   pc = START_ADDRESS;
   I = 0;
   return;
