@@ -14,7 +14,7 @@ Chip8::Chip8()
 {
   /* Fill memory to avoid reading garbage values */
   memset(memory, 0, sizeof(memory));
-
+  
   /* Load fontset into memory */
   for(uint16_t i = 0; i < FONTSET_SIZE; i++)
   {
@@ -41,9 +41,9 @@ Chip8::Chip8()
 
   for(uint16_t i = 0; i < 0xE; i++)
   {
-    table0[i] = opcodeNULL;
-    table8[i] = opcodeNULL;
-    tableE[i] = opcodeNULL;
+    table0[i] = &Chip8::opcodeNULL;
+    table8[i] = &Chip8::opcodeNULL;
+    tableE[i] = &Chip8::opcodeNULL;
   } 
 
   table0[0x0] = &Chip8::opcode00E0;
@@ -84,6 +84,7 @@ void Chip8::CPU_Init()
   memset(keyboard, 0, sizeof(keyboard));
   pc = START_ADDRESS;
   I = 0;
+  
   return;
 }
 
@@ -107,7 +108,13 @@ void Chip8::loadROM(const char* filename)
 
 void Chip8::Cycle()
 {
+  opcode = (memory[pc] << 8) | memory[pc + 1];
 
+  pc +=2;
+
+  ((*this).*(table[(opcode & 0xF000) >> 12]))();
+  ((*this).decrementDelayTimer());
+  ((*this).decrementSoundTimer());
 }
 
 /* DO NOT CALL MORE THAN ONCE PER CYCLE */

@@ -33,7 +33,7 @@ class Chip8
 {
   public:
   /* CPU Information */
-    BYTE memory[0xFFF]; 
+    BYTE memory[0x1000]; 
     BYTE registers[16];
     WORD I;
     WORD pc;

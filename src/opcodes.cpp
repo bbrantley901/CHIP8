@@ -163,7 +163,7 @@ void Chip8::opcode8XY6()
   uint8_t X = (opcode & 0x0F00) >> 8;
   uint8_t LSB = registers[X] & 0x0001;
   registers[0x000F] = LSB;
-  registers[X] == registers[X] >> 1;
+  registers[X] = registers[X] >> 1;
 }
 
 void Chip8::opcode8XY7()
@@ -235,26 +235,33 @@ void Chip8::opcodeDXYN()
   uint8_t registerX = ((opcode & 0x0F00) >> 8);
   uint8_t registerY = ((opcode & 0x00F0) >> 4);
   uint8_t xCoordinate = registers[registerX] % 64;
-  uint8_t yCoordinate = registers[registerY] % 31;
+  uint8_t yCoordinate = registers[registerY] % 32;
   registers[0x000F] = 0;
-  uint8_t nValue = opcode & 0x000F;
-  for(uint8_t i = 0; i < nValue; i++)
+  uint8_t height = opcode & 0x000F;
+  for(uint8_t i = 0; i < height; i++)
   {
     uint8_t spriteData = memory[I + i];
     for(uint8_t j = 0; j < 8; j++)
     {
      
-      spriteData = (spriteData & 0x80) >> j; //mask the MSB of the sprite info
-      if (spriteData == 1)
+      //spriteData = (spriteData & 0x80) >> j; //mask the MSB of the sprite info
+      uint8_t spritePixel = spriteData & (0x80  >> j);
+      uint8_t* screenPixel = &screenData[xCoordinate + i][yCoordinate + j];
+      if (spritePixel)
       {
-        if(screenData[i][j] == 0xFF)
+        if(*screenPixel == 0xFF)
         {
           registers[0xF] = 1;
         }
-        screenData[i][j] ^= 0xFF;
+        //screenData[i + xCoordinate][j + yCoordinate] ^= 0xFF;
+        *screenPixel ^= 0xFF;
       }
+      //screen.screenArray[i + xCoordinate][j + yCoordinate] = screenData[i + xCoordinate][j + yCoordinate];
+      //screen.screenArray[xCoordinate + i][yCoordinate + j] = *screenPixel;    
     }
+    
   }
+  memcpy(screen.screenArray, screenData,sizeof(screenData));
 }
 
 void Chip8::opcodeEX9E()

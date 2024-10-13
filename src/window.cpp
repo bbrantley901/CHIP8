@@ -15,7 +15,7 @@ Screen::Screen()
     std::cerr << "Failed to Initialize SDL video subsystem" << std::endl;
   } 
 
-  SDL_CreateWindowAndRenderer(2560, 1440 - TITLE_BAR_SIZE, 0, &window, &renderer);
+  SDL_CreateWindowAndRenderer(1920, 1080 - TITLE_BAR_SIZE, 0, &window, &renderer);
   /* This allows us to set the programmed resolution to the same as the chip-8's */
   SDL_RenderSetLogicalSize(renderer, 64, 32);
   SDL_SetWindowTitle(window, "CHIP-8");
