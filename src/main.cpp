@@ -7,10 +7,10 @@ int main(int argc, char *argv[])
   Chip8 chip;
   
   chip.CPU_Init();
-  chip.loadROM("test_opcode.ch8");
+  chip.loadROM("1-chip8-logo.ch8");
   for(auto x: chip.memory)
   {
-    std::cout << x;
+    std::cout << (int)x;
   }
 
   /*
@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
   for(;;){
     auto currentTime = std::chrono::high_resolution_clock::now();
     float dt = std::chrono::duration<float, std::chrono::milliseconds::period>(currentTime - lastCycleTime).count();
-    if(dt > 200)
+    if(dt > 400)
     {
       lastCycleTime = currentTime;
       chip.Cycle();

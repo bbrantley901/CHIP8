@@ -16,6 +16,7 @@ void Chip8::opcode0NNN()
   return; // no working implementation atm
 }
 
+//WORKING
 void Chip8::opcode00E0()
 {
   screen.ClearScreen();
@@ -28,6 +29,7 @@ void Chip8::opcode00EE()
   stack.pop();
 }
 
+//WORKING
 void Chip8::opcode1NNN()
 {
   // Jump to NNN
@@ -75,10 +77,11 @@ void Chip8::opcode5XYO()
   }
 }
 
+//WORKING
 void Chip8::opcode6XNN()
 {
   //Set VX == NN
-  uint8_t registerNum = opcode & 0x0F00;
+  uint16_t registerNum = opcode & 0x0F00;
   registerNum = registerNum >> 8;
   registers[registerNum] = opcode & 0x00FF;
 }
@@ -129,7 +132,7 @@ void Chip8::opcode8XY4()
   //VX = VX + VY
   uint8_t X = (opcode & 0x0F00) >> 8;
   uint8_t Y = (opcode * 0x00F0) >> 4;
-  uint16_t sum = registers[X] += registers[Y];
+  uint16_t sum = registers[X] + registers[Y];
   if(sum > 255)
   {
     registers[0x000F] = 1;
@@ -203,6 +206,7 @@ void Chip8::opcode9XY0()
   }
 }
 
+//WORKING
 void Chip8::opcodeANNN()
 {
   //Set I register to NNN
@@ -227,15 +231,19 @@ void Chip8::opcodeCXNN()
   registers[VX] = num & NN;
 }
 
+//WORKING (I think?)
 void Chip8::opcodeDXYN()
 {
   // This needs a fair bit of refactoring for readability lul
   // That's an issue for later
   //Also the current screen implementation is not set up for this.
-  uint8_t registerX = ((opcode & 0x0F00) >> 8);
-  uint8_t registerY = ((opcode & 0x00F0) >> 4);
+  std::cout << "Opcode is " << (int)opcode << std::endl;
+  uint8_t registerX = ((opcode & 0x0F00U) >> 8U);
+  uint8_t registerY = ((opcode & 0x00F0U) >> 4U);
   uint8_t xCoordinate = registers[registerX] % 64;
+  std::cout << "xPos is " << (int)xCoordinate << std::endl;
   uint8_t yCoordinate = registers[registerY] % 32;
+  std::cout << "yPos is " << (int)yCoordinate << std::endl;
   registers[0x000F] = 0;
   uint8_t height = opcode & 0x000F;
   for(uint8_t i = 0; i < height; i++)
@@ -246,7 +254,7 @@ void Chip8::opcodeDXYN()
      
       //spriteData = (spriteData & 0x80) >> j; //mask the MSB of the sprite info
       uint8_t spritePixel = spriteData & (0x80  >> j);
-      uint8_t* screenPixel = &screenData[xCoordinate + i][yCoordinate + j];
+      uint8_t* screenPixel = &screenData[xCoordinate + j][yCoordinate + i];
       if (spritePixel)
       {
         if(*screenPixel == 0xFF)
@@ -257,7 +265,9 @@ void Chip8::opcodeDXYN()
         *screenPixel ^= 0xFF;
       }
       //screen.screenArray[i + xCoordinate][j + yCoordinate] = screenData[i + xCoordinate][j + yCoordinate];
-      //screen.screenArray[xCoordinate + i][yCoordinate + j] = *screenPixel;    
+      //screen.screenArray[xCoordinate + i][yCoordinate + j] = *screenPixel;   
+      //printf("Pixel %d, %d is %d", yCoordinate+i, xCoordinate+j, screenData[yCoordinate+i][xCoordinate+j]); 
+      std::cout << "Pixel " << xCoordinate + j << ", " << yCoordinate+i << " is " << (int)screenData[xCoordinate+j][yCoordinate+i] << std::endl;  
     }
     
   }
