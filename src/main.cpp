@@ -7,28 +7,14 @@ int main(int argc, char *argv[])
   Chip8 chip;
   
   chip.CPU_Init();
-  chip.loadROM("1-chip8-logo.ch8");
+  chip.loadROM("2-ibm-logo.ch8");
+  //std::cout.setf(std::ios::hex, std::ios::basefield);
   for(auto x: chip.memory)
   {
-    std::cout << (int)x;
+     std::cout << (int)x;
   }
 
-  /*
-  chip.screen.UpdatePixel(32,16, true);
-  chip.screen.RenderWindow();
-  SDL_Delay(1000);
-  chip.screen.UpdatePixel(32,14, true);
-  chip.screen.RenderWindow();
-  SDL_Delay(1000);
-  chip.screen.UpdatePixel(32, 12, true);
-  chip.screen.UpdatePixel(32, 14, false);
-  chip.screen.RenderWindow();
-  SDL_Delay(1000);
-  chip.screen.ClearScreen();
-  chip.screen.RenderWindow();
-  SDL_Delay(1000);
-  chip.screen.DestroyScreen();
-*/
+/* I just copied this and need to actually figure out what it does */
   auto lastCycleTime = std::chrono::high_resolution_clock::now();
   for(;;){
     auto currentTime = std::chrono::high_resolution_clock::now();

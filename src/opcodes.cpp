@@ -236,14 +236,10 @@ void Chip8::opcodeDXYN()
 {
   // This needs a fair bit of refactoring for readability lul
   // That's an issue for later
-  //Also the current screen implementation is not set up for this.
-  std::cout << "Opcode is " << (int)opcode << std::endl;
   uint8_t registerX = ((opcode & 0x0F00U) >> 8U);
   uint8_t registerY = ((opcode & 0x00F0U) >> 4U);
   uint8_t xCoordinate = registers[registerX] % 64;
-  std::cout << "xPos is " << (int)xCoordinate << std::endl;
   uint8_t yCoordinate = registers[registerY] % 32;
-  std::cout << "yPos is " << (int)yCoordinate << std::endl;
   registers[0x000F] = 0;
   uint8_t height = opcode & 0x000F;
   for(uint8_t i = 0; i < height; i++)
@@ -252,7 +248,6 @@ void Chip8::opcodeDXYN()
     for(uint8_t j = 0; j < 8; j++)
     {
      
-      //spriteData = (spriteData & 0x80) >> j; //mask the MSB of the sprite info
       uint8_t spritePixel = spriteData & (0x80  >> j);
       uint8_t* screenPixel = &screenData[xCoordinate + j][yCoordinate + i];
       if (spritePixel)
@@ -261,16 +256,13 @@ void Chip8::opcodeDXYN()
         {
           registers[0xF] = 1;
         }
-        //screenData[i + xCoordinate][j + yCoordinate] ^= 0xFF;
         *screenPixel ^= 0xFF;
       }
-      //screen.screenArray[i + xCoordinate][j + yCoordinate] = screenData[i + xCoordinate][j + yCoordinate];
-      //screen.screenArray[xCoordinate + i][yCoordinate + j] = *screenPixel;   
-      //printf("Pixel %d, %d is %d", yCoordinate+i, xCoordinate+j, screenData[yCoordinate+i][xCoordinate+j]); 
-      std::cout << "Pixel " << xCoordinate + j << ", " << yCoordinate+i << " is " << (int)screenData[xCoordinate+j][yCoordinate+i] << std::endl;  
     }
     
   }
+  // Copy the screenData into screen's screenArray because they're two separate data structures for some reason
+  //TODO: Get rid of this stupid data copy
   memcpy(screen.screenArray, screenData,sizeof(screenData));
 }
 
